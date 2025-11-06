@@ -1,4 +1,7 @@
 
+using Ecommerce.Api.Extensions;
+using ECommerce.Domain.Contracts;
+using ECommerce.Persistence.Data.DataSeed;
 using ECommerce.Persistence.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +9,7 @@ namespace Ecommerce.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -21,10 +24,16 @@ namespace Ecommerce.Api
             builder.Services.AddDbContext<StoreDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            }); 
+            });
+            builder.Services.AddScoped<IDataIntializer, DataIntializier>();
             #endregion
 
             var app = builder.Build();
+
+            await app.MigrateDatabaseAsync();
+            await app.SeedDataAsync();
+
+
             #region Configure PipeLine
 
             // Configure the HTTP request pipeline.
@@ -42,7 +51,7 @@ namespace Ecommerce.Api
             app.MapControllers(); 
             #endregion
 
-            app.Run();
+            await app.RunAsync();
         }
     }
 }
