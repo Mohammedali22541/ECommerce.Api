@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ECommerce.Persistence\ECommerce.Persistence.csproj" />
     <ProjectReference Include="..\ECommerce.Presentation\ECommerce.Presentation.csproj" />
   </ItemGroup>
