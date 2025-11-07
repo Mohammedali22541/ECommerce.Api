@@ -1,7 +1,4 @@
 
-using ECommerce.Persistence.Data.DbContexts;
-using Microsoft.EntityFrameworkCore;
-
 namespace Ecommerce.Api
 {
     public class Program
@@ -11,7 +8,6 @@ namespace Ecommerce.Api
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            #region Register Container
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -25,7 +21,6 @@ namespace Ecommerce.Api
             #endregion
             
             var app = builder.Build();
-            #region Configure PipeLine
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -39,8 +34,7 @@ namespace Ecommerce.Api
             app.UseAuthorization();
 
 
-            app.MapControllers(); 
-            #endregion
+            app.MapControllers();
 
             app.Run();
         }
