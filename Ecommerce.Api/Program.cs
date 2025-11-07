@@ -23,7 +23,7 @@ namespace Ecommerce.Api
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             }); 
             #endregion
-
+            
             var app = builder.Build();
             #region Configure PipeLine
 
