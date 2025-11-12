@@ -31,7 +31,8 @@ namespace Ecommerce.Api
             });
             builder.Services.AddScoped<IDataIntializer, DataIntializier>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddAutoMapper(x=>x.AddProfile<ProductProfile>());
+            builder.Services.AddAutoMapper(typeof(ServiceAssemblyReference).Assembly);
+
             builder.Services.AddScoped<IProductService, ProductServices>();
             #endregion
 
@@ -53,7 +54,7 @@ namespace Ecommerce.Api
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            app.UseStaticFiles();
 
             app.MapControllers(); 
             #endregion
