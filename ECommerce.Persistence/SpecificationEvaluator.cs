@@ -28,7 +28,19 @@ namespace ECommerce.Persistence
                     Query = specification.Includes.Aggregate(Query, (CurrentQuery, includeExp) =>
                     CurrentQuery.Include(includeExp));
                 }
-                
+                if (specification.AddOrderBy is not null)
+                {
+                   Query = Query.OrderBy(specification.AddOrderBy);
+                }
+                if (specification.AddOrderByDes is not null)
+                {
+                    Query = Query.OrderByDescending(specification.AddOrderByDes);   
+                }
+                if (specification.IsPaginated == true)
+                {
+                    Query = Query.Skip(specification.Skip).Take(specification.Take);
+                }
+
             }
             
             return Query;

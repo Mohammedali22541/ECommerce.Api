@@ -3,6 +3,7 @@ using ECommerce.Domain.Contracts;
 using ECommerce.Domain.Entity.ProductModule;
 using ECommerce.Services.Abstraction;
 using ECommerce.Services.Specifications.ProductSpecifications;
+using ECommerce.Shared;
 using ECommerce.Shared.Dtos;
 using ECommerce.Shared.Dtos.ProductsDtos;
 using System;
@@ -23,12 +24,19 @@ namespace ECommerce.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<productDto>> GetAllProductsAsync(ProductQueryParam queryParam)
+        public async Task<PaginationResult<productDto>> GetAllProductsAsync(ProductQueryParam queryParam)
         {
+            var repo = _unitOfWork.GetRepository<Product, int>();
             var spec = new ProductWithBrandsAndTypeSpecificatio(queryParam);
-            var AllProduct =await _unitOfWork.GetRepository<Product, int>().GetAllAsync(spec);
+            var AllProduct =await repo.GetAllAsync(spec);
 
-            return _mapper.Map<IEnumerable<Product>, IEnumerable<productDto>>(AllProduct);
+            var data =  _mapper.Map<IEnumerable<Product>, IEnumerable<productDto>>(AllProduct);
+            var pagesize = data.Count();
+
+            var countSpec = new ProductsWithCountSpecification(queryParam);
+            var totalCount = await repo.GetCountAsync(countSpec);
+
+            return new PaginationResult<productDto>(queryParam.PageIndex, pagesize, totalCount, data);
         }
 
         public async Task<productDto> GetProductByIdAsync(int id)
