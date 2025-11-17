@@ -8,6 +8,7 @@ using ECommerce.Services;
 using ECommerce.Services.Abstraction;
 using ECommerce.Services.MappingProfiles;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace Ecommerce.Api
 {
@@ -31,8 +32,14 @@ namespace Ecommerce.Api
             });
             builder.Services.AddScoped<IDataIntializer, DataIntializier>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddAutoMapper(x=>x.AddProfile<ProductProfile>());
+            builder.Services.AddAutoMapper(typeof(ServiceAssemblyReference).Assembly);
+
             builder.Services.AddScoped<IProductService, ProductServices>();
+            builder.Services.AddSingleton<IConnectionMultiplexer>(c =>
+            {
+                return ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RedisConnection")!);
+            });
+            builder.Services.AddScoped<IBasketRepository , BasketRepository>();
             #endregion
 
             var app = builder.Build();
@@ -53,7 +60,7 @@ namespace Ecommerce.Api
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            app.UseStaticFiles();
 
             app.MapControllers(); 
             #endregion
