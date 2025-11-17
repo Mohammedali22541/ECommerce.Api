@@ -45,6 +45,12 @@ namespace ECommerce.Persistence.Data.Repositories
             return Query.FirstOrDefaultAsync();
         }
 
+        public Task<int> GetCountAsync(ISpecification<TEntity, TKey> spec)
+        {
+            var Query = SpecificationEvaluator.CreateQuery(_dbContext.Set<TEntity>(), spec);
+            return Query.CountAsync();
+        }
+
         public void Update(TEntity entity)
         {
             _dbContext.Set<TEntity>().Update(entity);

@@ -13,7 +13,7 @@ namespace ECommerce.Services.Specifications
          where TEntity : BaseEntity<TKey>
     {
 
-        protected BaseSpecification(Expression<Func<TEntity , bool>> criteria)
+        protected BaseSpecification(Expression<Func<TEntity, bool>> criteria)
         {
             Criteria = criteria;
         }
@@ -21,9 +21,33 @@ namespace ECommerce.Services.Specifications
 
         public Expression<Func<TEntity, bool>> Criteria { get; }
 
+        public Expression<Func<TEntity, object>> AddOrderBy { private set;  get; }
+
+        public Expression<Func<TEntity, object>> AddOrderByDes { private set; get;}
+        public int Take { get ; private set; }
+        public int Skip { get; private set; }
+        public bool IsPaginated { get; private set; }
+
+        protected void ApplyPagination(int pageIndex , int pageSize)
+        {
+            IsPaginated = true;
+            Take = pageSize;
+            Skip = (pageIndex -1) * pageSize;
+            
+
+        }
         protected void AddInclude(Expression<Func<TEntity,object>> IncludeExpression)
         {
             Includes.Add(IncludeExpression);
+        }
+
+        protected void AddOrderByAsc(Expression<Func<TEntity , object>> orderbyasc)
+        {
+            AddOrderBy = orderbyasc;
+        }
+        protected void AddOrderByDesc(Expression<Func<TEntity, object>> orderbyDesc)
+        {
+            AddOrderByDes = orderbyDesc;
         }
     }
 }
