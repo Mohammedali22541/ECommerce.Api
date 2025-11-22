@@ -2,6 +2,7 @@
 using ECommerce.Domain.Contracts;
 using ECommerce.Domain.Entity.BasketModule;
 using ECommerce.Services.Abstraction;
+using ECommerce.Services.Exceptions;
 using ECommerce.Shared.Dtos.BasketDtos;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,10 @@ namespace ECommerce.Services
         public async Task<BasketDto> GetBasketAsync(string BasketId)
         {
             var basket = await _basketRepository.GetBasketAsync(BasketId);
+            if (basket is null)
+            {
+                throw new BasketNotFoundException(BasketId);
+            }
 
             return _mapper.Map<BasketDto>(basket);
         }

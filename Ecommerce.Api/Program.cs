@@ -1,4 +1,5 @@
 
+using Ecommerce.Api.CustomMiddlewares;
 using Ecommerce.Api.Extensions;
 using ECommerce.Domain.Contracts;
 using ECommerce.Persistence.Data.DataSeed;
@@ -40,6 +41,9 @@ namespace Ecommerce.Api
                 return ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RedisConnection")!);
             });
             builder.Services.AddScoped<IBasketRepository , BasketRepository>();
+            builder.Services.AddScoped<IBasketServices , BasketService>();
+            builder.Services.AddScoped<ICacheRepository , CacheRepository>();
+            builder.Services.AddScoped<ICacheService , CacheService>();
             #endregion
 
             var app = builder.Build();
@@ -49,7 +53,7 @@ namespace Ecommerce.Api
 
 
             #region Configure PipeLine
-
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
