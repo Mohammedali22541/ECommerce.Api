@@ -3,6 +3,7 @@ using ECommerce.Services.Abstraction;
 using ECommerce.Shared;
 using ECommerce.Shared.Dtos;
 using ECommerce.Shared.Dtos.ProductsDtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace ECommerce.Presentation.Controllers
         }
 
         [HttpGet]
-        [RedisCache(5)]
+        [RedisCache(durationInMins: 5)]
         public async Task<ActionResult<PaginationResult<productDto>>> GeTAllProductAsync( [FromQuery]ProductQueryParam queryParam)
         {
             var AllProduct = await _productService.GetAllProductsAsync( queryParam);
