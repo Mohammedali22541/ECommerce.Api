@@ -1,8 +1,20 @@
 [
-  { "Name": "H&M" },
-  { "Name": "ZARA" },
-  { "Name": "Nike" },
-  { "Name": "Activ" },
-  { "Name": "Mango" },
-  { "Name": "Levi's" }
+  {
+    "Name": "Chicken"
+  },
+  {
+    "Name": "Seafood"
+  },
+  {
+    "Name": "Pasta and Noodles"
+  },
+  {
+    "Name": "Soup"
+  },
+  {
+    "Name": "Desserts"
+  },
+  {
+    "Name": "Vegetable"
+  }
 ]
