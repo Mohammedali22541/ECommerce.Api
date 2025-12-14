@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -65,6 +66,8 @@ namespace ECommerce.Presentation.Controllers
             }
             return ValidationProblem(modelState);
         }
+
+        protected string GetEmailFromToken() => User.FindFirstValue(ClaimTypes.Email)!;
         private static int MapErrorTypeIntoStatusCode(ErrorType errorType) => errorType switch
         {
             ErrorType.NotFound => StatusCodes.Status404NotFound,
