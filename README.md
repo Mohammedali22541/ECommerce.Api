@@ -1,7 +1,7 @@
 # ECommerce.Api
 
-ASP.NET Core Web API backend for an e-commerce system.  
-The solution follows a layered architecture and includes product catalog, basket, orders, and identity/authentication modules.
+ECommerce.Api is a .NET 8 ASP.NET Core Web API backend for an e-commerce system.  
+It exposes REST endpoints for catalog browsing, baskets, orders, and identity management, and follows a layered architecture with clear separation between presentation, services, persistence, domain, and shared contracts/DTOs.
 
 ## Overview
 
@@ -12,6 +12,7 @@ This repository contains a .NET 8 e-commerce backend built with:
 - Redis-backed basket/cache features
 - ASP.NET Core Identity + JWT token generation
 - Swagger/OpenAPI for API exploration (Development environment)
+- Static product images served from `wwwroot`
 
 ## Key Features
 
@@ -37,6 +38,17 @@ This repository contains a .NET 8 e-commerce backend built with:
 - **Infrastructure**
   - Automatic migration + seeding at startup for both store and identity databases
   - Custom exception handling middleware
+
+## API Surface (High-Level)
+
+Base route: `/api`
+
+- **Products**: `GET /products`, `GET /products/{id}`, `GET /products/brands`, `GET /products/types`
+- **Basket**: `GET /basket?id=...`, `POST /basket`, `DELETE /basket/{id}`
+- **Orders** (authorized): `POST /orders`, `GET /orders`, `GET /orders/{id}`
+- **Delivery Methods**: `GET /orders/deliveryMethods`
+- **Authentication**: `POST /authentication/login`, `POST /authentication/register`, `GET /authentication/emailExists`
+- **User Profile** (authorized): `GET /authentication/currentuser`, `GET /authentication/address`, `PUT /authentication/address`
 
 ## Tech Stack
 
@@ -79,6 +91,11 @@ dotnet build ECommerce.sln
 dotnet run --project Ecommerce.Api/Ecommerce.Api.csproj
 ```
 
+Before running, ensure:
+
+- SQL Server is available and connection strings are updated in `appsettings.Development.json` (or overridden via environment variables/user-secrets).
+- Redis is running and reachable via `ConnectionStrings:RedisConnection`.
+
 Default launch settings include:
 
 - `https://localhost:7296`
@@ -106,6 +123,8 @@ Important settings:
 - `URLs:BaseUrl`
 
 > Recommended: override secrets and environment-specific values via environment variables or `dotnet user-secrets` for local development.
+
+`URLs:BaseUrl` is used to build absolute URLs for product images served from `wwwroot/images/products`.
 
 ## Database, Migrations, and Seeding
 
@@ -139,6 +158,11 @@ Swagger is enabled in `Development` environment.
 1. Run the API.
 2. Open `/swagger`.
 3. Use the **Authorize** button and provide a Bearer JWT token for protected endpoints.
+
+## Authentication Notes
+
+- Register or login via `/api/authentication/register` or `/api/authentication/login`.
+- Use the returned JWT in the `Authorization` header: `Bearer {token}` for protected endpoints.
 
 ## Testing
 
